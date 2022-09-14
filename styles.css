@@ -31,15 +31,29 @@ flex-direction: column;
 }
 
 .buttons-container {
-
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
 }
 
 .button-left {
-    
+    background-color:#8E8E93;
+    border: 3px solid #8E8E93;    
+    height:75px;
+    width:75px;
+    border-radius:50%;
+    box-shadow: 0px 0px 0px 2px #1C1C1E inset;
 }
 
 .button-right {
-
+    background-color:#8E8E93;
+    border: 3px solid #8E8E93;    
+    height:75px;
+    width:75px;
+    border-radius:50%;
+    box-shadow: 0px 0px 0px 2px #1C1C1E inset;
 }
 
 .laps-container {
