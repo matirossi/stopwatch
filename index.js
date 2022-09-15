@@ -22,6 +22,8 @@ const runTimer = () => {
         seconds++;
         if (seconds < 10) {
             appendSeconds.innerHTML = "0" + seconds;
+        } else if (seconds === 60) {
+            appendSeconds.innerHTML = "00";
         } else {
             appendSeconds.innerHTML = seconds;
         }
@@ -35,12 +37,10 @@ const runTimer = () => {
         } else {
             appendMinutes.innerHTML = minutes;
         } 
-        appendSeconds.innerHTML = seconds;
-        
     }
 }
 
-buttonRight.addEventListener("click",() => {
+buttonRight.onclick = () => {
     if (!isTimerRunning){
         interval = setInterval(runTimer,10);
         buttonLeft.innerHTML = "Lap";
@@ -54,8 +54,18 @@ buttonRight.addEventListener("click",() => {
         isTimerRunning = false;
         console.log("time is running now")
     }
-});
+};
 
-//buttonRight.addEventListener("click",console.log("evento"));
+buttonLeft.addEventListener("click", () => {
+    if (buttonLeft.innerHTML === "Reset") {
+        minutes = 0;
+        seconds = 0;
+        tens = 0;
+        appendMinutes.innerHTML = "00";
+        appendSeconds.innerHTML = "00";
+        appendTens.innerHTML = "00";
+    }
+})
+
 
 
