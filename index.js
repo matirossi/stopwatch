@@ -7,7 +7,7 @@ const appendMinutes = document.getElementById("minutes");
 const buttonRight = document.getElementById("button-right");
 const buttonLeft = document.getElementById("button-left");
 let interval = null;
-//const listOfLaps = document.getElementsByClassName();
+const lapsList = document.getElementById("laps-list");
 let isTimerRunning = false;
 
 const runTimer = () => {
@@ -56,6 +56,14 @@ buttonRight.onclick = () => {
     }
 };
 
+const createNewLap = () => {
+    let lapTimer = "00:00.00";
+    const newLap = document.createElement("li");
+    newLap.classList.add("lap")
+    newLap.innerHTML = `<span>Lap</span><span>${lapTimer}</span>`;
+    lapsList.appendChild(newLap);
+}
+
 buttonLeft.addEventListener("click", () => {
     if (buttonLeft.innerHTML === "Reset") {
         minutes = 0;
@@ -65,7 +73,7 @@ buttonLeft.addEventListener("click", () => {
         appendSeconds.innerHTML = "00";
         appendTens.innerHTML = "00";
     }
-})
-
-
-
+    if (buttonLeft.innerHTML === "Lap") {
+        createNewLap();
+    }
+});
