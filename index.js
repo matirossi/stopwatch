@@ -1,14 +1,15 @@
 let tens = 0;
 let seconds = 0;
 let minutes = 0;
+let interval;
+let isTimerRunning = false;
 const appendTens = document.getElementById("tens");
 const appendSeconds = document.getElementById("seconds");
 const appendMinutes = document.getElementById("minutes");
 const buttonRight = document.getElementById("button-right");
 const buttonLeft = document.getElementById("button-left");
-let interval = null;
 const lapsList = document.getElementById("laps-list");
-let isTimerRunning = false;
+const sixEmptyLaps = lapsList.innerHTML;
 
 const runTimer = () => {
     tens++;
@@ -67,6 +68,10 @@ const createNewLap = () => {
     }
 }
 
+    /* const createSixEmptyLaps = () => {
+
+    }
+ */
 buttonLeft.addEventListener("click", () => {
     if (buttonLeft.innerHTML === "Reset") {
         minutes = 0;
@@ -75,6 +80,7 @@ buttonLeft.addEventListener("click", () => {
         appendMinutes.innerHTML = "00";
         appendSeconds.innerHTML = "00";
         appendTens.innerHTML = "00";
+        lapsList.innerHTML = sixEmptyLaps;
     }
     if (buttonLeft.innerHTML === "Lap") {
         createNewLap();
