@@ -47,13 +47,12 @@ buttonRight.onclick = () => {
         buttonLeft.innerHTML = "Lap";
         buttonRight.innerHTML = "stop";
         isTimerRunning = true;
-        console.log("button clicked")
+        buttonLeft.disabled = false;
     } else {
         clearInterval(interval);
         buttonLeft.innerHTML = "Reset"; 
         buttonRight.innerHTML = "Start";
         isTimerRunning = false;
-        console.log("time is running now")
     }
 };
 
@@ -68,12 +67,10 @@ const createNewLap = () => {
     }
 }
 
-    /* const createSixEmptyLaps = () => {
-
-    }
- */
 buttonLeft.addEventListener("click", () => {
     if (buttonLeft.innerHTML === "Reset") {
+        buttonLeft.disabled = true;
+        buttonLeft.innerHTML = "Lap";
         minutes = 0;
         seconds = 0;
         tens = 0;
@@ -81,8 +78,7 @@ buttonLeft.addEventListener("click", () => {
         appendSeconds.innerHTML = "00";
         appendTens.innerHTML = "00";
         lapsList.innerHTML = sixEmptyLaps;
-    }
-    if (buttonLeft.innerHTML === "Lap") {
+    } else if(buttonLeft.innerHTML === "Lap"){
         createNewLap();
     }
 });
