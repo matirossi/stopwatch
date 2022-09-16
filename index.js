@@ -61,7 +61,10 @@ const createNewLap = () => {
     const newLap = document.createElement("li");
     newLap.classList.add("lap")
     newLap.innerHTML = `<span>Lap</span><span>${lapTimer}</span>`;
-    lapsList.appendChild(newLap);
+    lapsList.insertBefore(newLap, lapsList.firstChild);
+    if (lapsList.lastElementChild.innerHTML.trim() === ""){
+        lapsList.lastElementChild.remove();
+    }
 }
 
 buttonLeft.addEventListener("click", () => {
