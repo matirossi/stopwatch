@@ -3,7 +3,7 @@ body {
 }
 main {
     height: 100%;
-
+    color: white;
     width: 390px;
     height: 844px;
     background-color: #1C1C1E;
@@ -20,14 +20,18 @@ main {
 }
 
 .top-container {
-flex-grow: 1.2;
-display: flex;
-flex-direction: column;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 
 .timer-container{
     flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 70px;x
 }
 
 .buttons-container {
@@ -38,7 +42,7 @@ flex-direction: column;
     padding-bottom: 20px;
 }
 
-.button-left {
+#button-left {
     background-color:#8E8E93;
     border: 3px solid #8E8E93;    
     height:75px;
@@ -47,7 +51,7 @@ flex-direction: column;
     box-shadow: 0px 0px 0px 2px #1C1C1E inset;
 }
 
-.button-right {
+#button-right {
     background-color:#8E8E93;
     border: 3px solid #8E8E93;    
     height:75px;
@@ -57,14 +61,30 @@ flex-direction: column;
 }
 
 .laps-container {
-
-    flex-grow: 0.8;
+    flex-grow: 0.9;
     border-top: 1.5px solid #49494C;
-    }
+    scrollbar-width: none;
+    overflow-y: scroll;
+}
+.laps-container::-webkit-scrollbar {
+    display: none;
+}
+
+
+.laps-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .lap {
-
+    border-bottom: 1.5px solid #49494C;
+    height: 11%;
+    padding: 0px 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .clock-menu {
