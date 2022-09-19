@@ -1,84 +1,88 @@
-let tens = 0;
-let seconds = 0;
-let minutes = 0;
-let interval;
+let [tensCounter,secondsCounter, minutesCounter] = [0, 0, 0];
+let [lapTensCounter,lapSecondsCounter, lapMinutesCounter] = [0, 0, 0];
+let interval, lapInterval;
 let isTimerRunning = false;
-const appendTens = document.getElementById("tens");
-const appendSeconds = document.getElementById("seconds");
-const appendMinutes = document.getElementById("minutes");
-const buttonRight = document.getElementById("button-right");
-const buttonLeft = document.getElementById("button-left");
-const lapsList = document.getElementById("laps-list");
-const sixEmptyLaps = lapsList.innerHTML;
-
+const $tens = document.getElementById("tens");
+const $seconds = document.getElementById("seconds");
+const $minutes = document.getElementById("minutes");
+const $buttonRight = document.getElementById("button-right");
+const $buttonLeft = document.getElementById("button-left");
+const $lapsList = document.getElementById("laps-list");
+const sixEmptyLaps = $lapsList.innerHTML;
+let num = 2
 const runTimer = () => {
-    tens++;
-    if (tens > 9){
-        appendTens.innerHTML = tens;
+    tensCounter++;
+    if (tensCounter > 9){
+        $tens.innerHTML = tensCounter;
     } else {
-        appendTens.innerHTML = "0" + tens
+        $tens.innerHTML = "0" + tensCounter;
     }
-    if (tens === 99) {
-        tens = 0;
-        seconds++;
-        if (seconds < 10) {
-            appendSeconds.innerHTML = "0" + seconds;
-        } else if (seconds === 60) {
-            appendSeconds.innerHTML = "00";
+    if (tensCounter === 99) {
+        tensCounter = 0;
+        secondsCounter++;
+        if (secondsCounter < 10) {
+            $seconds.innerHTML = "0" + secondsCounter;
+        } else if (secondsCounter === 60) {
+            $seconds.innerHTML = "00";
         } else {
-            appendSeconds.innerHTML = seconds;
+            $seconds.innerHTML = secondsCounter;
         }
     }
-    if (seconds === 60)
+    if (secondsCounter === 60)
     { 
-        seconds = 0;
-        minutes++;
-        if (minutes < 10) {
-            appendMinutes.innerHTML = "0" + minutes;
+        secondsCounter = 0;
+        minutesCounter++;
+        if (minutesCounter < 10) {
+            $minutes.innerHTML = `0${minutesCounter}`;
         } else {
-            appendMinutes.innerHTML = minutes;
+            $minutes.innerHTML = minutesCounter;
         } 
     }
 }
-
-buttonRight.onclick = () => {
-    if (!isTimerRunning){
-        interval = setInterval(runTimer,10);
-        buttonLeft.innerHTML = "Lap";
-        buttonRight.innerHTML = "stop";
-        isTimerRunning = true;
-        buttonLeft.disabled = false;
-    } else {
-        clearInterval(interval);
-        buttonLeft.innerHTML = "Reset"; 
-        buttonRight.innerHTML = "Start";
-        isTimerRunning = false;
-    }
-};
 
 const createNewLap = () => {
     let lapTimer = "00:00.00";
     const newLap = document.createElement("li");
     newLap.classList.add("lap")
     newLap.innerHTML = `<span>Lap</span><span>${lapTimer}</span>`;
-    lapsList.insertBefore(newLap, lapsList.firstChild);
-    if (lapsList.lastElementChild.innerHTML.trim() === ""){
-        lapsList.lastElementChild.remove();
-    }
+    $lapsList.insertBefore(newLap, $lapsList.firstChild);
+    ($lapsList.lastElementChild.innerHTML.trim() === "") && $lapsList.lastElementChild.remove();
 }
 
-buttonLeft.addEventListener("click", () => {
-    if (buttonLeft.innerHTML === "Reset") {
-        buttonLeft.disabled = true;
-        buttonLeft.innerHTML = "Lap";
-        minutes = 0;
-        seconds = 0;
-        tens = 0;
-        appendMinutes.innerHTML = "00";
-        appendSeconds.innerHTML = "00";
-        appendTens.innerHTML = "00";
-        lapsList.innerHTML = sixEmptyLaps;
-    } else if(buttonLeft.innerHTML === "Lap"){
+$buttonRight.onclick = () => {   
+    if (!isTimerRunning){
+        interval = setInterval(runTimer,10);
+        $buttonLeft.innerHTML = "Lap";
+        $buttonRight.innerHTML = "stop";
+        isTimerRunning = true;
+        $buttonLeft.disabled = false;
+        $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
+    } else {
+        clearInterval(interval);
+        $buttonLeft.innerHTML = "Reset"; 
+        $buttonRight.innerHTML = "Start";
+        isTimerRunning = false;
+    }
+};
+
+
+$buttonLeft.addEventListener("click", () => {
+    if ($buttonLeft.innerHTML === "Reset") {
+        $buttonLeft.disabled = true;
+        $buttonLeft.innerHTML = "Lap";
+        minutesCounter = 0;
+        secondsCounter = 0;
+        tensCounter = 0; 
+        $minutes.innerHTML = "00";
+        $seconds.innerHTML = "00";
+        $tens.innerHTML = "00";
+        $lapsList.innerHTML = sixEmptyLaps;
+    } else if($buttonLeft.innerHTML === "Lap"){
         createNewLap();
     }
 });
+
+
+const increment = (num) => {
+    num++
+}
