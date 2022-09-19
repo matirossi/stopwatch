@@ -1,5 +1,7 @@
 let [tensCounter,secondsCounter, minutesCounter] = [0, 0, 0];
-let [lapTensCounter,lapSecondsCounter, lapMinutesCounter] = [0, 0, 0];
+const lapCounters = {tensCounter: 0, secondsCounter: 0, minutesCounter: 0};
+let lapPreviousDate;
+let elapsedTime = 0;
 let interval, lapInterval;
 let isTimerRunning = false;
 const $tens = document.getElementById("tens");
@@ -40,6 +42,22 @@ const runTimer = () => {
     }
 }
 
+const updateLapNode = (lapObj) => {
+    const tens = lapObj.tensCounter > 9 ? lapObj.tensCounter :  `0${lapObj.tensCounter}`;
+    const seconds = lapObj.secondsCounter > 9 ? lapObj.secondsCounter :  `0${lapObj.secondsCounter}`;
+    const minutes = lapObj.minutesCounter > 9 ? lapObj.minutesCounter :  `0${lapObj.minutesCounter}`;
+    $lapsList.firstElementChild.innerHTML = `<span>Lap</span><span>${minutes}:${seconds}.${tens}</span>`;
+}
+
+const runLapTimer = (lapObj) => {
+    const currentDate = Date.now() - lapPreviousDate;
+    const temporalElapsedTime = currentDate + elapsedTime;
+    lapObj.tensCounter = temporalElapsedTime % 100;
+    lapObj.secondsCounter = Math.floor(temporalElapsedTime / 1000) % 60;
+    lapObj.minutesCounter = Math.floor((temporalElapsedTime / 1000) / 60) % 60;
+     updateLapNode(lapObj);
+}
+
 const createNewLap = () => {
     let lapTimer = "00:00.00";
     const newLap = document.createElement("li");
@@ -51,14 +69,18 @@ const createNewLap = () => {
 
 $buttonRight.onclick = () => {   
     if (!isTimerRunning){
-        interval = setInterval(runTimer,10);
+        $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
+        lapPreviousDate = Date.now();
         $buttonLeft.innerHTML = "Lap";
         $buttonRight.innerHTML = "stop";
         isTimerRunning = true;
         $buttonLeft.disabled = false;
-        $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
+        interval = setInterval(runTimer,10);
+        lapInterval = setInterval(runLapTimer, 1, lapCounters);
     } else {
         clearInterval(interval);
+        clearInterval(lapInterval);
+        elapsedTime += Date.now() - lapPreviousDate;
         $buttonLeft.innerHTML = "Reset"; 
         $buttonRight.innerHTML = "Start";
         isTimerRunning = false;
@@ -76,8 +98,11 @@ $buttonLeft.addEventListener("click", () => {
         $minutes.innerHTML = "00";
         $seconds.innerHTML = "00";
         $tens.innerHTML = "00";
+        elapsedTime = 0;
         $lapsList.innerHTML = sixEmptyLaps;
     } else if($buttonLeft.innerHTML === "Lap"){
+        elapsedTime = 0;
+        lapPreviousDate = Date.now();
         createNewLap();
     }
 });
