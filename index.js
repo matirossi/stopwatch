@@ -1,6 +1,7 @@
 const counters = {hundredsCounter: 0,secondsCounter: 0, minutesCounter: 0}
 const lapCounters = {hundredsCounter: 0, secondsCounter: 0, minutesCounter: 0};
 let lapStartingDate, startingDate;
+let currentLapNumber = 0
 let [elapsedTime, elapsedLapTime] = [0, 0];
 let interval;
 const recordsList = [];
@@ -11,8 +12,8 @@ const $buttonLeft = document.getElementById("left-button");
 const $lapsList = document.getElementById("laps-list");
 const sixEmptyLaps = $lapsList.innerHTML;
 
-
 const createNewLap = () => {
+    currentLapNumber++;
     const newLap = document.createElement("li");
     newLap.classList.add("lap");
     $lapsList.insertBefore(newLap, $lapsList.firstChild);
@@ -30,7 +31,7 @@ const updateLapNode = () => {
     const hundreds = lapCounters.hundredsCounter > 9 ? lapCounters.hundredsCounter :  `0${lapCounters.hundredsCounter}`;
     const seconds = lapCounters.secondsCounter > 9 ? lapCounters.secondsCounter :  `0${lapCounters.secondsCounter}`;
     const minutes = lapCounters.minutesCounter < 9 ? `0${lapCounters.minutesCounter}` : lapCounters.minutesCounter ;
-    $lapsList.firstElementChild.innerHTML = `<span>Lap</span><span>${minutes}:${seconds}.${hundreds}</span>`;
+    $lapsList.firstElementChild.innerHTML = `<span>Lap ${currentLapNumber}</span><span>${minutes}:${seconds}.${hundreds}</span>`;
 }
 
 const updateCounters = (temporalElapsedTime, countersObject) => {
