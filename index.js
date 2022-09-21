@@ -6,8 +6,8 @@ let interval;
 const recordsList = [];
 let isTimerRunning = false;
 const $timer = document.getElementById("timer");
-const $buttonRight = document.getElementById("button-right");
-const $buttonLeft = document.getElementById("button-left");
+const $buttonRight = document.getElementById("right-button");
+const $buttonLeft = document.getElementById("left-button");
 const $lapsList = document.getElementById("laps-list");
 const sixEmptyLaps = $lapsList.innerHTML;
 
@@ -48,27 +48,7 @@ const updateTimer = () => {
     updateTimerNode();
     updateLapNode(); 
 }
-
-$buttonRight.onclick = () => {   
-    if (!isTimerRunning){
-        $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
-        startingDate = Date.now();
-        lapStartingDate = Date.now();
-        $buttonRight.innerText = "stop";
-        $buttonLeft.innerText = "Lap";
-        $buttonLeft.disabled = false;
-        interval = setInterval(updateTimer,10);
-        isTimerRunning = true;
-    } else {
-        clearInterval(interval);
-        elapsedTime += Date.now() - startingDate;
-        elapsedLapTime +=Date.now() - lapStartingDate;
-        $buttonLeft.innerHTML = "Reset"; 
-        $buttonRight.innerHTML = "Start";
-        isTimerRunning = false;
-    }
-};
-
+ 
 const addNewRecord = () => {
     recordsList.unshift(elapsedLapTime);
 }
@@ -95,14 +75,53 @@ const colorMinValue = () => {
     const currentMinValueNode = document.querySelector(`#laps-list :nth-child(${minValuePosition + 2})`);
     currentMinValueNode.classList.add("min-value-lap");
 }
+const styleStopButton = () => {
+    $buttonRight.innerText = "Stop";
+    $buttonRight.classList.remove("start-button");
+    $buttonRight.classList.add("stop-button");
+}
+const styleStartButton = () => {
+    $buttonRight.innerText = "Start";
+    $buttonRight.classList.remove("stop-button");
+    $buttonRight.classList.add("start-button");
+}
+const styleDisabledLeftButton = () => {
+    $buttonLeft.disabled = true;
+    $buttonLeft.innerText = "Lap";
+    $buttonLeft.classList.remove("enabled-left-button");
+    $buttonLeft.classList.add("disabled-left-button");
+}
+const styleEnabledLeftButton = () => {
+    $buttonLeft.disabled = false;
+    $buttonLeft.innerText = "Lap";
+    $buttonLeft.classList.remove("disabled-left-button");
+    $buttonLeft.classList.add("enabled-left-button");
+}
+$buttonRight.onclick = () => {   
+    if (!isTimerRunning){
+        $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
+        startingDate = Date.now();
+        lapStartingDate = Date.now();
+        styleStopButton();
+        styleEnabledLeftButton();
+        interval = setInterval(updateTimer,10);
+        isTimerRunning = true;
+    } else {
+        clearInterval(interval);
+        elapsedTime += Date.now() - startingDate;
+        elapsedLapTime +=Date.now() - lapStartingDate;
+        styleStartButton();
+        $buttonLeft.innerHTML = "Reset"; 
+        isTimerRunning = false;
+    }
+};
 
 $buttonLeft.addEventListener("click", () => {
     if($buttonLeft.innerText === "Reset") {
-        $buttonLeft.disabled = true;
-        $buttonLeft.innerText = "Lap";
         $timer.innerText = "00:00.00";
         [elapsedTime, elapsedLapTime] = [0, 0];
         $lapsList.innerHTML = sixEmptyLaps;
+        styleDisabledLeftButton();
         resetRecordList();
     } else if($buttonLeft.innerText === "Lap"){
         elapsedLapTime +=Date.now() - lapStartingDate;
