@@ -2,7 +2,7 @@
     --main-bg-color: #030003;
     --main-font-color:#FFFCFF;
     --disabled-left-button-bg-color: #201C22;
-    --enabled-left-button-bg-color: #1B313E;
+    --enabled-left-button-bg-color: #373338;
     --disabled-left-button-font-color: #8E8A93;
     --start-button-bg-color: #0B2A14;
     --start-button-font-color: #4ABD67;
@@ -10,6 +10,7 @@
     --stop-butotn-font-color:#DD3E39;
     --max-value-lap-font-color:#ED4B49;
     --min-value-lap-font-color: #49CA6C;
+    --lap-border-color: #222223;
 }
 
 body {
@@ -28,8 +29,11 @@ main {
     flex-direction: column;
 }
 
+.info-header {
+    height: 24px;
+}
 .stopwatch-container {
-    height: 649px;
+    height: 625px;
     display: flex;
     flex-direction: column;
     margin-left: 13px;
@@ -37,19 +41,22 @@ main {
 }
 
 .top-container {
-    flex-grow: 1;
+    height: 387px;
     display: flex;
     flex-direction: column;
+    justify-content:space-between ;
 }
 
 
 .timer-container {
-    flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 80px;
+    font-size: 69px;
     font-weight: 100;
+}
+.timer-container p {
+    margin-top: 2em;
 }
 
 .buttons-container {
@@ -91,8 +98,8 @@ main {
 }
 
 .laps-container {
-    flex-grow: 0.9;
-    border-top: 1.5px solid #49494C;
+    height: 237px;
+    border-top: 1.5px solid var(--lap-border-color);
     scrollbar-width: none;
     overflow-y: scroll;
 }
@@ -108,7 +115,7 @@ main {
 }
 
 .lap {
-    border-bottom: 1px solid #49494C;
+    border-bottom: 1px solid var(--lap-border-color);
     height: 34px;
     padding: 0px 15px;
     display: flex;
@@ -118,7 +125,7 @@ main {
 }
 
 .clock-menu {
-    height: 66px;
+    height: 67px;
     background-color: #222223;
 }
 
