@@ -6,7 +6,6 @@ let lapStartingDate, startingDate;
 let currentLapNumber = 0
 let [elapsedTime, elapsedLapTime] = [0, 0];
 let interval;
-const recordsList = [];
 let isTimerRunning = false;
 const $timer = document.getElementById("timer");
 const $buttonRight = document.getElementById("right-button");
@@ -18,21 +17,16 @@ const sixEmptyLaps = $lapsList.innerHTML;
 const createNewLap = () => {
     currentLapNumber++;
     const newLap = document.createElement("li");
-    const lapNumberSpan = document.createElement("span");
-    const timerSpan = document.createElement("span");
     newLap.classList.add("lap");
     $lapsList.insertBefore(newLap, $lapsList.firstChild);
+    newLap.innerHTML = `<span>lap ${currentLapNumber}</span><span>00:00.00</span>`
     $currentFirstLap = newLap;
-    newLap.appendChild(lapNumberSpan);
-    newLap.appendChild(timerSpan);
-    lapNumberSpan.innerText = `Lap ${currentLapNumber}`
-    console.log($currentFirstLap.lastElementChild);
     ($lapsList.lastElementChild.innerHTML.trim() === "") && $lapsList.lastElementChild.remove();
 }
 const formatNumber = (number) => {
-    return (number).toString().padStart(2, "0");
+    return number.toString().padStart(2, "0");
 }
-const updateTimerNode = ($timer) => {
+const updateTimerNode = ($timer, counters) => {
     const hundreds = formatNumber(counters.hundredsCounter);
     const seconds = formatNumber(counters.secondsCounter);
     const minutes = formatNumber(counters.minutesCounter);
@@ -51,18 +45,9 @@ const updateTimer = () => {
     const lapTemporalElapsedTime = currentDate - lapStartingDate + elapsedLapTime;
     updateCounters(temporalElapsedTime, counters);
     updateCounters(lapTemporalElapsedTime, lapCounters);
-    updateTimerNode($timer);
-    updateTimerNode($currentFirstLap.lastElementChild);
+    updateTimerNode($timer, counters);
+    updateTimerNode($currentFirstLap.lastElementChild, lapCounters);
 }
- 
-const addNewRecord = () => {
-    recordsList.unshift(elapsedLapTime);
-}
-
-const resetRecordList = () => {
-    recordsList.length = 0;
-}
-
 
 $buttonRight.onclick = () => {   
     if (!isTimerRunning){
@@ -70,7 +55,7 @@ $buttonRight.onclick = () => {
         startingDate = Date.now();
         lapStartingDate = Date.now();
         ButtonStyling.styleStopButton($buttonRight);
-        ButtonStyling.styleEnabledLeftButton($buttonLeft);
+        ButtonStyling.styleEnabledLeftButton($buttonLeft);   
         interval = setInterval(updateTimer,10);
         isTimerRunning = true;
     } else {
@@ -83,25 +68,22 @@ $buttonRight.onclick = () => {
     }
 };
 
+const resetTimersNodes = () => {
+    $timer.innerText = "00:00.00";
+    $lapsList.innerHTML = sixEmptyLaps;
+
+}
 
 $buttonLeft.addEventListener("click", () => {
     if($buttonLeft.innerText === "Reset") {
-        currentLapNumber = 0;
-        $timer.innerText = "00:00.00";
-        [elapsedTime, elapsedLapTime] = [0, 0];
-        $lapsList.innerHTML = sixEmptyLaps;
+        resetTimersNodes();
+        [elapsedTime, elapsedLapTime, currentLapNumber] = [0, 0, 0];
         ButtonStyling.styleDisabledLeftButton($buttonLeft);
-        resetRecordList();
     } else if($buttonLeft.innerText === "Lap"){
         elapsedLapTime +=Date.now() - lapStartingDate;
-        addNewRecord()
+        LapStyling.updateMinMaxRecords(elapsedLapTime, $lapsList, currentLapNumber);
         elapsedLapTime = 0;
         lapStartingDate = Date.now();
         createNewLap()
-        if(recordsList.length > 1){
-            LapStyling.uncolorLaps();
-            LapStyling.colorMaxValue(recordsList);
-            LapStyling.colorMinValue(recordsList);
-        }
     }
 });
