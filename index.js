@@ -1,3 +1,5 @@
+import * as LapStyling from './LapStyling.js';
+import * as ButtonStyling from './ButtonStyling.js';
 const counters = {hundredsCounter: 0,secondsCounter: 0, minutesCounter: 0}
 const lapCounters = {hundredsCounter: 0, secondsCounter: 0, minutesCounter: 0};
 let lapStartingDate, startingDate;
@@ -57,61 +59,21 @@ const addNewRecord = () => {
 const resetRecordList = () => {
     recordsList.length = 0;
 }
-const uncolorLaps = () => {
-    const previousMaxTimeNode = document.querySelector(".max-value-lap");
-    previousMaxTimeNode && previousMaxTimeNode.classList.remove("max-value-lap");
-    const previousMinTimeNode = document.querySelector(".min-value-lap");
-    previousMinTimeNode && previousMinTimeNode.classList.remove("min-value-lap");
-}
 
-const colorMaxValue = () => {
-    const maxValue = Math.max(...recordsList);
-    const maxValuePosition = recordsList.indexOf(maxValue);
-    const currentMaxValueNode = document.querySelector(`#laps-list :nth-child(${maxValuePosition + 2})`);
-    currentMaxValueNode.classList.add("max-value-lap");
-}
-const colorMinValue = () => {
-    const minValue = Math.min(...recordsList);
-    const minValuePosition = recordsList.indexOf(minValue);
-    const currentMinValueNode = document.querySelector(`#laps-list :nth-child(${minValuePosition + 2})`);
-    currentMinValueNode.classList.add("min-value-lap");
-}
-const styleStopButton = () => {
-    $buttonRight.innerText = "Stop";
-    $buttonRight.classList.remove("start-button");
-    $buttonRight.classList.add("stop-button");
-}
-const styleStartButton = () => {
-    $buttonRight.innerText = "Start";
-    $buttonRight.classList.remove("stop-button");
-    $buttonRight.classList.add("start-button");
-}
-const styleDisabledLeftButton = () => {
-    $buttonLeft.disabled = true;
-    $buttonLeft.innerText = "Lap";
-    $buttonLeft.classList.remove("enabled-left-button");
-    $buttonLeft.classList.add("disabled-left-button");
-}
-const styleEnabledLeftButton = () => {
-    $buttonLeft.disabled = false;
-    $buttonLeft.innerText = "Lap";
-    $buttonLeft.classList.remove("disabled-left-button");
-    $buttonLeft.classList.add("enabled-left-button");
-}
 $buttonRight.onclick = () => {   
     if (!isTimerRunning){
         $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
         startingDate = Date.now();
         lapStartingDate = Date.now();
-        styleStopButton();
-        styleEnabledLeftButton();
+        ButtonStyling.styleStopButton($buttonRight);
+        ButtonStyling.styleEnabledLeftButton($buttonLeft);
         interval = setInterval(updateTimer,10);
         isTimerRunning = true;
     } else {
         clearInterval(interval);
         elapsedTime += Date.now() - startingDate;
         elapsedLapTime +=Date.now() - lapStartingDate;
-        styleStartButton();
+        ButtonStyling.styleStartButton($buttonRight);
         $buttonLeft.innerHTML = "Reset"; 
         isTimerRunning = false;
     }
@@ -119,10 +81,11 @@ $buttonRight.onclick = () => {
 
 $buttonLeft.addEventListener("click", () => {
     if($buttonLeft.innerText === "Reset") {
+        currentLapNumber = 0;
         $timer.innerText = "00:00.00";
         [elapsedTime, elapsedLapTime] = [0, 0];
         $lapsList.innerHTML = sixEmptyLaps;
-        styleDisabledLeftButton();
+        ButtonStyling.styleDisabledLeftButton($buttonLeft);
         resetRecordList();
     } else if($buttonLeft.innerText === "Lap"){
         elapsedLapTime +=Date.now() - lapStartingDate;
@@ -131,9 +94,9 @@ $buttonLeft.addEventListener("click", () => {
         lapStartingDate = Date.now();
         createNewLap()
         if(recordsList.length > 1){
-            uncolorLaps();
-            colorMaxValue();
-            colorMinValue();
+            LapStyling.uncolorLaps();
+            LapStyling.colorMaxValue(recordsList);
+            LapStyling.colorMinValue(recordsList);
         }
     }
 });
