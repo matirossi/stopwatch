@@ -3,14 +3,14 @@ import * as ButtonStyling from "./ButtonStyling.js";
 
 let lapStartingTimestamp, startingTimestamp;
 let isTimerRunning = false;
-let interval;
+let animationFrame;
 
 //counters
 let currentLapNumber = 0;
 let [timeAtPause, lapTimeAtPause] = [0, 0];
 let [elapsedTime, lapElapsedTime] = [0, 0];
-const counters = { hundredsCounter: 0, secondsCounter: 0, minutesCounter: 0 };
-const lapCounters = {hundredsCounter: 0, secondsCounter: 0, minutesCounter: 0};
+const counters = { centisecondsCounter: 0, secondsCounter: 0, minutesCounter: 0 };
+const lapCounters = {centisecondsCounter: 0, secondsCounter: 0, minutesCounter: 0};
 
 //DOM elements
 const $timer = document.getElementById("timer");
@@ -36,53 +36,29 @@ const formatNumber = (number) => {
 };
 
 const updateTimerNode = ($timer, counters) => {
-  const hundreds = formatNumber(counters.hundredsCounter);
+  const centisecondsCounter = formatNumber(counters.centisecondsCounter);
   const seconds = formatNumber(counters.secondsCounter);
   const minutes = formatNumber(counters.minutesCounter);
-  $timer.innerText = `${minutes}:${seconds}.${hundreds}`;
+  $timer.innerText = `${minutes}:${seconds}.${centisecondsCounter}`;
 };
 
 const updateCounters = (temporalElapsedTime, countersObject) => {
-  countersObject.hundredsCounter = Math.floor(temporalElapsedTime / 10) % 100;
+  countersObject.centisecondsCounter = Math.floor(temporalElapsedTime / 10) % 100;
   countersObject.secondsCounter = Math.floor(temporalElapsedTime / 1000) % 60;
   countersObject.minutesCounter = Math.floor(temporalElapsedTime / 1000 / 60) % 60;
 };
 
-const updateTimer = () => {
-  if (!startingTimestamp) startingTimestamp = Date.now();
-  if (!lapStartingTimestamp) lapStartingTimestamp = Date.now();
-  elapsedTime = Date.now() - startingTimestamp + timeAtPause;
-  lapElapsedTime = Date.now() - lapStartingTimestamp + lapTimeAtPause;
+const updateTimerAnimation = (timestamp) => {
+  if (!startingTimestamp) startingTimestamp = timestamp;
+  if (!lapStartingTimestamp) lapStartingTimestamp = timestamp;
+  elapsedTime = timestamp - startingTimestamp + timeAtPause;
+  lapElapsedTime = timestamp - lapStartingTimestamp + lapTimeAtPause;
   updateCounters(elapsedTime, counters);
   updateCounters(lapElapsedTime, lapCounters);
   updateTimerNode($timer, counters);
   updateTimerNode($currentFirstLap.lastElementChild, lapCounters);
-}
-
-/* const updateTimerAnimation = (timestamp) => {
-  if (!startingDate) startingDate = timestamp;
-  if (!lapStartingDate) lapStartingDate = timestamp;
-  const currentDate = timestamp;
-  const temporalElapsedTime = currentDate - startingDate + elapsedTime;
-  const lapTemporalElapsedTime = currentDate - lapStartingDate + lapElapsedTime;
-  updateCounters(temporalElapsedTime, counters);
-  updateCounters(lapTemporalElapsedTime, lapCounters);
-  updateTimerNode($timer, counters);
-  updateTimerNode($currentFirstLap.lastElementChild, lapCounters);
-
-  if (isTimerRunning) {
-    window.requestAnimationFrame(updateTimerAnimation);
-  } else {
-    elapsedTime = temporalElapsedTime;
-    lapElapsedTime = lapTemporalElapsedTime;
-    [startingDate, lapStartingDate] = [0, 0];
-  }
-  if (recordCurrentLapElapsedTime) {
-    lapElapsedTime = lapTemporalElapsedTime;
-    recordCurrentLapElapsedTime = !recordCurrentLapElapsedTime;
-    resetVariables = true
-  }
-}; */
+  animationFrame = window.requestAnimationFrame(updateTimerAnimation);
+};
 
 const resetTimersNodes = () => {
   $timer.innerText = "00:00.00";
@@ -102,14 +78,16 @@ $buttonRight.onclick = () => {
   if (!isTimerRunning) {
     isTimerRunning = true;
     $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
-    interval = setInterval(updateTimer, 50);
+//    interval = setTimeout(updateTimer, 50);
     ButtonStyling.styleStopButton($buttonRight);
     ButtonStyling.styleEnabledLeftButton($buttonLeft);
-    //window.requestAnimationFrame(updateTimerAnimation);
+    animationFrame = window.requestAnimationFrame(updateTimerAnimation);
   } else {
-    clearInterval(interval);
+//    clearTimeout(interval);
+    cancelAnimationFrame(animationFrame);
     timeAtPause = elapsedTime;
     lapTimeAtPause = lapElapsedTime;
+    [startingTimestamp, lapStartingTimestamp] = [0,0]
     isTimerRunning = false;
     ButtonStyling.styleStartButton($buttonRight);
     $buttonLeft.innerHTML = "Reset";
