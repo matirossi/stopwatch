@@ -78,12 +78,10 @@ $buttonRight.onclick = () => {
   if (!isTimerRunning) {
     isTimerRunning = true;
     $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
-//    interval = setTimeout(updateTimer, 50);
     ButtonStyling.styleStopButton($buttonRight);
     ButtonStyling.styleEnabledLeftButton($buttonLeft);
     animationFrame = window.requestAnimationFrame(updateTimerAnimation);
   } else {
-//    clearTimeout(interval);
     cancelAnimationFrame(animationFrame);
     timeAtPause = elapsedTime;
     lapTimeAtPause = lapElapsedTime;
