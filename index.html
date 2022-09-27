@@ -8,15 +8,27 @@
 </head>
 <body>
     <main>
+        <div class="info-header"></div>
         <div class="stopwatch-container" >
             <div class="top-container">
-                <div class="timer-container"></div>
+                <div class="timer-container">
+                    <p id="timer"><span id="minutes">00</span>:<span id="seconds">00</span>.<span id="tens">00</span></p>
+                </div>
                 <div class="buttons-container">
-                    <button class="button-left"></button>
-                    <button class="button-right"></button>
+                    <button id="left-button" class="timer-button disabled-left-button" disabled="true">Lap</button>
+                    <button id="right-button" class="timer-button start-button">Start</button>
                 </div>
             </div>
-            <div  class="laps-container"></div>
+            <div  class="laps-container">
+                <ul id="laps-list" class="laps-list">
+                    <li class="lap"></li>
+                    <li class="lap"></li>
+                    <li class="lap"></li>
+                    <li class="lap"></li>
+                    <li class="lap"></li>
+                    <li class="lap"></li>
+                </ul>
+            </div>
         </div>
         <div class="clock-menu">
             <div class="clock-menu-button"></div>
@@ -26,6 +38,6 @@
         </div>
 
     </main>
-    <script src="index.js"></script>
+    <script src="index.js" type="module"></script>
 </body>
 </html>
