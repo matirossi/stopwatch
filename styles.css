@@ -25,7 +25,7 @@ body {
 main {
     color: var(--main-font-color);
     background-color: var(--main-bg-color);
-    display: flexbox;
+    display: flex;
     flex-direction: column;
 }
 
@@ -101,7 +101,7 @@ main {
     height: 237px;
     border-top: 1.5px solid var(--lap-border-color);
     scrollbar-width: none;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .laps-container::-webkit-scrollbar {
     display: none;
@@ -127,10 +127,6 @@ main {
 .clock-menu {
     height: 67px;
     background-color: #222223;
-}
-
-.clock-menu-button {
-
 }
 
 .max-value-lap {
