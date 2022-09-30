@@ -1,16 +1,16 @@
+import {updateCounters, updateTimerNode} from "./Utils.js"
 import * as LapStyling from "./LapStyling.js";
 import * as ButtonStyling from "./ButtonStyling.js";
 
 let lapStartingTimestamp, startingTimestamp;
 let isTimerRunning = false;
-let animationFrame;
+let animationFrameId;
 
 //counters
 let currentLapNumber = 0;
 let [timeAtPause, lapTimeAtPause] = [0, 0];
 let [elapsedTime, lapElapsedTime] = [0, 0];
 const counters = { centisecondsCounter: 0, secondsCounter: 0, minutesCounter: 0 };
-const lapCounters = {centisecondsCounter: 0, secondsCounter: 0, minutesCounter: 0};
 
 //DOM elements
 const $timer = document.getElementById("timer");
@@ -27,25 +27,7 @@ const createNewLap = () => {
   $lapsList.insertBefore(newLap, $lapsList.firstChild);
   newLap.innerHTML = `<span>lap ${currentLapNumber}</span><span>00:00.00</span>`;
   $currentFirstLap = newLap;
-  $lapsList.lastElementChild.innerHTML.trim() === "" &&
-  $lapsList.lastElementChild.remove();
-};
-
-const formatNumber = (number) => {
-  return number.toString().padStart(2, "0");
-};
-
-const updateTimerNode = ($timer, counters) => {
-  const centisecondsCounter = formatNumber(counters.centisecondsCounter);
-  const seconds = formatNumber(counters.secondsCounter);
-  const minutes = formatNumber(counters.minutesCounter);
-  $timer.innerText = `${minutes}:${seconds}.${centisecondsCounter}`;
-};
-
-const updateCounters = (temporalElapsedTime, countersObject) => {
-  countersObject.centisecondsCounter = Math.floor(temporalElapsedTime / 10) % 100;
-  countersObject.secondsCounter = Math.floor(temporalElapsedTime / 1000) % 60;
-  countersObject.minutesCounter = Math.floor(temporalElapsedTime / 1000 / 60) % 60;
+  $lapsList.lastElementChild.innerHTML.trim() === "" && $lapsList.lastElementChild.remove();
 };
 
 const updateTimerAnimation = (timestamp) => {
@@ -54,10 +36,10 @@ const updateTimerAnimation = (timestamp) => {
   elapsedTime = timestamp - startingTimestamp + timeAtPause;
   lapElapsedTime = timestamp - lapStartingTimestamp + lapTimeAtPause;
   updateCounters(elapsedTime, counters);
-  updateCounters(lapElapsedTime, lapCounters);
   updateTimerNode($timer, counters);
-  updateTimerNode($currentFirstLap.lastElementChild, lapCounters);
-  animationFrame = window.requestAnimationFrame(updateTimerAnimation);
+  updateCounters(lapElapsedTime, counters);
+  updateTimerNode($currentFirstLap.lastElementChild, counters);
+  animationFrameId = window.requestAnimationFrame(updateTimerAnimation);
 };
 
 const resetTimersNodes = () => {
@@ -80,19 +62,19 @@ $buttonRight.onclick = () => {
     $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
     ButtonStyling.styleStopButton($buttonRight);
     ButtonStyling.styleEnabledLeftButton($buttonLeft);
-    animationFrame = window.requestAnimationFrame(updateTimerAnimation);
+    animationFrameId = window.requestAnimationFrame(updateTimerAnimation);
   } else {
-    cancelAnimationFrame(animationFrame);
+    cancelAnimationFrame(animationFrameId);
     timeAtPause = elapsedTime;
     lapTimeAtPause = lapElapsedTime;
-    [startingTimestamp, lapStartingTimestamp] = [0,0]
+    resetStartingPoints();
     isTimerRunning = false;
     ButtonStyling.styleStartButton($buttonRight);
     $buttonLeft.innerHTML = "Reset";
   }
 };
 
-$buttonLeft.addEventListener("click", () => {
+$buttonLeft.onclick = () => {
   if ($buttonLeft.innerText === "Reset") {
     resetTimersNodes();
     resetCounters();
@@ -104,4 +86,4 @@ $buttonLeft.addEventListener("click", () => {
     lapStartingTimestamp = 0;
     createNewLap();
   }
-});
+};
