@@ -1,24 +1,24 @@
-const styleStopButton = ($buttonRight) => {
-    $buttonRight.innerText = "Stop";
-    $buttonRight.classList.remove("start-button");
-    $buttonRight.classList.add("stop-button");
+const styleStopButton = (button) => {
+    button.innerText = "Stop";
+    button.classList.remove("start-button");
+    button.classList.add("stop-button");
 }
-const styleStartButton = ($buttonRight) => {
-    $buttonRight.innerText = "Start";
-    $buttonRight.classList.remove("stop-button");
-    $buttonRight.classList.add("start-button");
+const styleStartButton = (button) => {
+    button.innerText = "Start";
+    button.classList.remove("stop-button");
+    button.classList.add("start-button");
 }
-const styleDisabledLeftButton = ($buttonLeft) => {
-    $buttonLeft.disabled = true;
-    $buttonLeft.innerText = "Lap";
-    $buttonLeft.classList.remove("enabled-left-button");
-    $buttonLeft.classList.add("disabled-left-button");
+const styleDisabledButton = (button) => {
+    button.disabled = true;
+    button.innerText = "Lap";
+    button.classList.remove("enabled-button");
+    button.classList.add("disabled-button");
 }
-const styleEnabledLeftButton = ($buttonLeft) => {
-    $buttonLeft.disabled = false;
-    $buttonLeft.innerText = "Lap";
-    $buttonLeft.classList.remove("disabled-left-button");
-    $buttonLeft.classList.add("enabled-left-button");
+const styleEnabledButton = (button) => {
+    button.disabled = false;
+    button.innerText = "Lap";
+    button.classList.remove("disabled-button");
+    button.classList.add("enabled-button");
 }
 
-export {styleDisabledLeftButton, styleEnabledLeftButton, styleStartButton, styleStopButton};
+export {styleDisabledButton, styleEnabledButton, styleStartButton, styleStopButton};

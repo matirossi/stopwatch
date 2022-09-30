@@ -2,20 +2,20 @@ import {updateCounters, updateTimerNode} from "./Utils.js"
 import * as LapStyling from "./LapStyling.js";
 import * as ButtonStyling from "./ButtonStyling.js";
 
-let lapStartingTimestamp, startingTimestamp;
 let isTimerRunning = false;
 let animationFrameId;
+let lapStartingTimestamp, startingTimestamp;
 
 //counters
-let currentLapNumber = 0;
 let [timeAtPause, lapTimeAtPause] = [0, 0];
 let [elapsedTime, lapElapsedTime] = [0, 0];
 const counters = { centisecondsCounter: 0, secondsCounter: 0, minutesCounter: 0 };
+let currentLapNumber = 0;
 
 //DOM elements
 const $timer = document.getElementById("timer");
-const $buttonRight = document.getElementById("right-button");
-const $buttonLeft = document.getElementById("left-button");
+const $startStopButton = document.getElementById("start-stop-button");
+const $lapResetButton = document.getElementById("lap-reset-button");
 const $lapsList = document.getElementById("laps-list");
 const $sixEmptyLaps = $lapsList.innerHTML;
 let $currentFirstLap;
@@ -56,12 +56,12 @@ const resetStartingPoints = () => {
   startingTimestamp = 0;
 }
 
-$buttonRight.onclick = () => {
+$startStopButton.onclick = () => {
   if (!isTimerRunning) {
     isTimerRunning = true;
     $lapsList.firstElementChild.innerHTML.trim() === "" && createNewLap();
-    ButtonStyling.styleStopButton($buttonRight);
-    ButtonStyling.styleEnabledLeftButton($buttonLeft);
+    ButtonStyling.styleStopButton($startStopButton);
+    ButtonStyling.styleEnabledButton($lapResetButton);
     animationFrameId = window.requestAnimationFrame(updateTimerAnimation);
   } else {
     cancelAnimationFrame(animationFrameId);
@@ -69,18 +69,18 @@ $buttonRight.onclick = () => {
     lapTimeAtPause = lapElapsedTime;
     resetStartingPoints();
     isTimerRunning = false;
-    ButtonStyling.styleStartButton($buttonRight);
-    $buttonLeft.innerHTML = "Reset";
+    ButtonStyling.styleStartButton($startStopButton);
+    $lapResetButton.innerText = "Reset";
   }
 };
 
-$buttonLeft.onclick = () => {
-  if ($buttonLeft.innerText === "Reset") {
+$lapResetButton.onclick = () => {
+  if ($lapResetButton.innerText === "Reset") {
     resetTimersNodes();
     resetCounters();
     resetStartingPoints();
-    ButtonStyling.styleDisabledLeftButton($buttonLeft);
-  } else if ($buttonLeft.innerText === "Lap") {
+    ButtonStyling.styleDisabledButton($lapResetButton);
+  } else if ($lapResetButton.innerText === "Lap") {
     LapStyling.updateMinMaxRecords(lapElapsedTime, $lapsList, currentLapNumber);
     lapTimeAtPause = 0;
     lapStartingTimestamp = 0;

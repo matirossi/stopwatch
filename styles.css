@@ -1,9 +1,9 @@
 :root {
     --main-bg-color: #030003;
     --main-font-color:#FFFCFF;
-    --disabled-left-button-bg-color: #201C22;
-    --enabled-left-button-bg-color: #373338;
-    --disabled-left-button-font-color: #8E8A93;
+    --disabled-button-bg-color: #201C22;
+    --enabled-button-bg-color: #373338;
+    --disabled-button-font-color: #8E8A93;
     --start-button-bg-color: #0B2A14;
     --start-button-font-color: #4ABD67;
     --stop-button-bg-color: #360E0F;
@@ -73,15 +73,15 @@ main {
     border-radius:50%;
     box-shadow: 0px 0px 0px 1.5px var(--main-bg-color) inset;
 }
-.disabled-left-button {
-    background-color: var(--disabled-left-button-bg-color);
-    border: 2px solid var(--disabled-left-button-bg-color);    
-    color: var(--disabled-left-button-font-color);
+.disabled-button {
+    background-color: var(--disabled-button-bg-color);
+    border: 2px solid var(--disabled-button-bg-color);    
+    color: var(--disabled-button-font-color);
 }
 
-.enabled-left-button {
-    background-color: var(--enabled-left-button-bg-color);
-    border: 2px solid var(--enabled-left-button-bg-color);
+.enabled-button {
+    background-color: var(--enabled-button-bg-color);
+    border: 2px solid var(--enabled-button-bg-color);
     color: var(--main-font-color);
 }
 
