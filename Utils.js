@@ -3,16 +3,16 @@ const formatNumber = (number) => {
 };
 
 const updateTimerNode = ($timer, counters) => {
-    const centisecondsCounter = formatNumber(counters.centisecondsCounter);
-    const seconds = formatNumber(counters.secondsCounter);
-    const minutes = formatNumber(counters.minutesCounter);
-    $timer.innerText = `${minutes}:${seconds}.${centisecondsCounter}`;
+    $timer.innerText = `${formatNumber(counters.minutes)}:${formatNumber(counters.seconds)}.${formatNumber(counters.centiseconds)}`;
 };
 
-const updateCounters = (temporalElapsedTime, countersObject) => {
-    countersObject.centisecondsCounter = Math.floor(temporalElapsedTime / 10) % 100;
-    countersObject.secondsCounter = Math.floor(temporalElapsedTime / 1000) % 60;
-    countersObject.minutesCounter = Math.floor(temporalElapsedTime / 1000 / 60) % 60;
+const updateCounters = (temporalElapsedTime) => {
+    const counters = {
+        centiseconds: Math.floor(temporalElapsedTime / 10) % 100,
+        seconds: Math.floor(temporalElapsedTime / 1000) % 60,
+        minutes: Math.floor(temporalElapsedTime / 1000 / 60) % 60
+    }
+    return counters
 };
 
-export {updateCounters, updateTimerNode}
+export { updateCounters, updateTimerNode }

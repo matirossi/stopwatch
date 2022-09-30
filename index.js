@@ -9,7 +9,6 @@ let lapStartingTimestamp, startingTimestamp;
 //counters
 let [timeAtPause, lapTimeAtPause] = [0, 0];
 let [elapsedTime, lapElapsedTime] = [0, 0];
-const counters = { centisecondsCounter: 0, secondsCounter: 0, minutesCounter: 0 };
 let currentLapNumber = 0;
 
 //DOM elements
@@ -35,10 +34,8 @@ const updateTimerAnimation = (timestamp) => {
   if (!lapStartingTimestamp) lapStartingTimestamp = timestamp;
   elapsedTime = timestamp - startingTimestamp + timeAtPause;
   lapElapsedTime = timestamp - lapStartingTimestamp + lapTimeAtPause;
-  updateCounters(elapsedTime, counters);
-  updateTimerNode($timer, counters);
-  updateCounters(lapElapsedTime, counters);
-  updateTimerNode($currentFirstLap.lastElementChild, counters);
+  updateTimerNode($timer, updateCounters(elapsedTime));
+  updateTimerNode($currentFirstLap.lastElementChild, updateCounters(lapElapsedTime));
   animationFrameId = window.requestAnimationFrame(updateTimerAnimation);
 };
 
@@ -48,7 +45,7 @@ const resetTimersNodes = () => {
 };
 
 const resetCounters =  () => {
-  [timeAtPause, lapTimeAtPause, currentLapNumber, elapsedTime, lapElapsedTime] = [0, 0, 0, 0, 0];
+  [timeAtPause, lapTimeAtPause, elapsedTime, lapElapsedTime, currentLapNumber] = [0, 0, 0, 0, 0];
 }
 
 const resetStartingPoints = () => {
