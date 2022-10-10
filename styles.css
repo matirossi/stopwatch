@@ -32,7 +32,7 @@ main {
 .info-header {
     height: 24px;
 }
-.stopwatch-container {
+.app-container {
     height: 625px;
     display: flex;
     flex-direction: column;
@@ -40,7 +40,7 @@ main {
     margin-right: 13px;
 }
 
-.top-container {
+.stopwatch-container {
     height: 387px;
     display: flex;
     flex-direction: column;
